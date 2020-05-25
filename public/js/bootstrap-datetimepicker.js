@@ -1495,7 +1495,6 @@
   $.fn.datetimepicker.Constructor = Datetimepicker;
   var dates = {};
   dates['en'] = {
-    en: {
       days:        ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
       daysShort:   ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
       daysMin:     ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
@@ -1505,7 +1504,6 @@
       suffix:      ['st', 'nd', 'rd', 'th'],
       today:       'Today',
       clear:       'Clear'
-    }
   };
   dates['fr'] = {
 		days: ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"],
@@ -1519,7 +1517,6 @@
 		weekStart: 1,
 		format: "dd/mm/yyyy hh:ii"
   };
-  console.log(dates)
 
   var DPGlobal = {
     modes:            [
