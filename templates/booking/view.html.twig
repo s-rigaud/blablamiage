@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}🗺️| {% trans %}Booking view{% endtrans %} - BlablaMiage{% endblock %}
+
+{% block body %}
+
+    {% if booking is defined %}
+        <div class="card">
+            <div class="card-body">
+                <img src="{{ asset('images/user.webp') }}" class="user align-self-start mr-3" alt="User Image">
+                <h5 class="card-title">{% trans %}Travel with{% endtrans %} {{booking.trip.driver.surname}}</h5>
+                <a href="{{ path('trip_view', {id: booking.trip.id}) }}"><h6>Review trip</h6></a>
+                <h6>{% trans %}The{% endtrans %} {{booking.trip.start.format('d/m/Y')}}</h6>
+                <h6>{% trans %}From{% endtrans %} {{booking.trip.fromC.name|capitalize}} {% trans %}at{% endtrans %} {{booking.trip.start.format('H:m:i')}}</h6>
+                <h6>{% trans %}To{% endtrans %} {{booking.trip.toC.name|capitalize}} {% trans %}at{% endtrans %} {{booking.trip.end.format('H:m:i')}}</h6>
+                <h6>{{booking.seats}} {% trans %}seat{% endtrans %}{% if booking.seats > 1 %}s{% endif %}</h6>
+                <h6>{% trans %}For{% endtrans %} {{booking.trip.seatPrice * booking.seats}}€</h6>
+            </div>
+            <form action="{{ path('booking_view', {id: booking.id}) }}" method="POST" onsubmit="return confirm('{% trans %}Do you really want to delete this booking{% endtrans %} ?')">
+                <input type="hidden" name="_method" value="DELETE">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ booking.id)}}">
+                <button class="btn btn-danger mb-3">{% trans %}Delete booking{% endtrans %}</button>
+            </form>
+        </div>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}🗺️| {% trans %}Booking listing{% endtrans %} - BlablaMiage{% endblock %}
+
+{% block body %}
+    {% if bookings is defined and not bookings is empty %}
+
+        <h1>{% trans %}All Booking{% endtrans %} : </h1>
+        {% for booking in bookings %}
+            <a href=" {{ path('booking_view', {id: booking.id}) }}">
+                {{ include('booking/_card_booking_view.html.twig', {'booking': booking}) }}
+            </a>
+        {% endfor %}
+
+    {% else %}
+        <h1>{% trans %}No booking where found for you{% endtrans %}</h1>
+        <a href="{{ path('home') }}"><button type="button" class="btn btn-secondary">{% trans %}Start searching now{% endtrans %} 🔎🗺️</button></a>
+    {% endif %}
+{% endblock %}

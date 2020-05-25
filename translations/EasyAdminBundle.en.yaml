@@ -1,0 +1,8 @@
+action:
+  cancel: Cancel
+  delete: Delete
+  edit: Edit
+  list: Back to the list
+  new: New
+  save: Save
+  search: Search

@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}🗺️| {% trans %}Creating trip{% endtrans %} - BlablaMiage{% endblock %}
+
+{% block body %}
+<h2>{% trans %}Create trip{% endtrans %}</h2>
+{{ include('trip/_form.html.twig', {button: 'Create'}) }}
+
+{% endblock %}

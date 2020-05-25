@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}🗺️| {% trans %}Account detail{% endtrans %} - BlablaMiage{% endblock %}
+
+{% block body %}
+
+<h1>{% trans %}Account detail{% endtrans %}</h1>
+<h6>{% trans %}Account login{% endtrans %}:</h6> <p>{{app.user.login}}</p>
+<h6>{% trans %}Surname{% endtrans %}:</h6> <p>{{app.user.surname}}</p>
+<h6>{% trans %}Mail{% endtrans %} @ :</h6> <p>{{app.user.mail}}</p>
+<h6>{% trans %}Locale{% endtrans %} :</h6> <p>{{app.user.locale}}</p>
+<h6>{% trans %}Theme{% endtrans %} :</h6> <p>{{app.user.theme|capitalize}}</p>
+
+<form action="{{ path('account_history') }}">
+    <button type="submit" class="btn btn-secondary">{% trans %}Browse my trips and bookings{% endtrans %}</button>
+</form>
+
+{% endblock %}

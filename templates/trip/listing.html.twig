@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}🗺️| {% trans %}Trip listing{% endtrans %} - BlablaMiage{% endblock %}
+
+{% block body %}
+    {% if trips is defined and trips %}
+        {% if best_trip is defined and best_trip %}
+            <h1>{% trans %}Best trip{% endtrans %}</h1>
+            <a href="{{ path('trip_view', {id: best_trip.id}) }}">
+                {{ include('trip/_card_trip_view.html.twig', {'trip': best_trip}) }}
+            </a>
+        {% endif %}
+
+
+        <h1>{{ trip_label|default('All trips')|trans }}</h1>
+        <div class="count">
+            {% trans %}Currently{% endtrans %} {{ trips.getTotalItemCount }} {% trans %}active trip{% endtrans %}{% if trips.getTotalItemCount > 1 %}s{% endif %} !
+        </div>
+        {% for trip in trips %}
+
+            <a href="{{ path('trip_view', {id: trip.id}) }}">
+                {{ include('trip/_card_trip_view.html.twig', {'trip': trip}) }}
+            </a>
+        {% endfor %}
+        <div class="pagination">
+            {{ knp_pagination_render(trips) }}
+        </div>
+
+    {% else %}
+        <h6>{% trans %}No trips were found yet so you can{% endtrans %} :</h6>
+        <form action="{{ path('search') }}">
+            <button type="submit" class="btn btn-secondary">{% trans %}Return to search{% endtrans %} 🔎🗺️</button>
+        </form>
+        <form action="{{ path('trip_create') }}">
+            <button type="submit" class="btn btn-secondary">{% trans %}Create a new one{% endtrans %} 🗺️</button>
+        </form>
+    {% endif %}
+{% endblock %}

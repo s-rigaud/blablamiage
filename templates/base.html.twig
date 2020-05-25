@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="{{ app.request.locale }}">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>{% block title %}{% endblock %}</title>
+      <link rel="icon" href="{{ asset('favicon.png') }}" />
+      <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+      <link rel="stylesheet" type="text/css" href="{{ asset('css/base.css') }}">
+      <link rel="stylesheet" type="text/css" href="{{ asset('css/search.css') }}">
+      {% block stylesheets %}{% endblock %}
+   </head>
+   <body>
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+         <svg class="bi bi-reply-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9.079 11.9l4.568-3.281a.719.719 0 000-1.238L9.079 4.1A.716.716 0 008 4.719V6c-1.5 0-6 0-7 8 2.5-4.5 7-4 7-4v1.281c0 .56.606.898 1.079.62z"/>
+         </svg>
+         <h3><a class="navbar-brand" data-toggle="tooltip" data-placement="right" title="{% trans %}Back to home{% endtrans %}" href="{{path('home')}}">BlablaMiage</a></h3>
+         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+         </button>
+         <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto"></ul>
+            <ul class="navbar-nav">
+               <li class="nav-item active">
+                  <a class="nav-link" href="{{ path('trip_recent') }}">📰 {% trans %}Browse new trips{% endtrans %}</a>
+               </li>
+            </ul>
+            <ul class="navbar-nav">
+               <li class="nav-item active">
+                  <a class="nav-link" href="{{ path('search') }}">🔍 {% trans %}Search{% endtrans %}</a>
+               </li>
+            </ul>
+            <ul class="navbar-nav">
+               <li class="nav-item active">
+                  <a class="nav-link" href="{{ path('trip_create') }}">➕ {% trans %}Create a trip{% endtrans %}</a>
+               </li>
+            </ul>
+            {% if app.user %}
+               <ul class="navbar-nav">
+                  <li class="nav-item dropdown col col-md-6">
+                     <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img src="{{ asset('images/user.webp') }}" class="user align-self-start mr-3" style="width: 25px !important;height: 25px !important;" alt="User Image">
+                        {{ app.user.surname }}
+                     </a>
+                     <div class="dropdown-menu ml-3" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{{ path('account') }}">{% trans %}My account{% endtrans %}</a>
+                        <a class="dropdown-item" href="{{ path('account_history') }}">{% trans %}My history{% endtrans %}</a>
+                        {% if 'ROLE_ADMIN' in app.user.roles %}
+                           <a class="dropdown-item" href="/admin">{% trans %}Administrate{% endtrans %}</a>
+                        {% endif %}
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item text-danger" href="{{ path('logout') }}">{% trans %}Logout{% endtrans %}</a>
+                     </div>
+                  </li>
+               </ul>
+               {% endif %}
+               <ul class="navbar-nav" data-toggle="tooltip" data-placement="bottom" title="{% trans %}Change language{% endtrans %}">
+                  <li class="nav-item dropdown col col-md-6">
+                     <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {% set img_url = 'images/flag_'~ app.request.locale ~'.png'%}
+                        <img src="{{ asset(img_url) }}" class="user align-self-start mr-3" style="width: 30px !important;height: 25px !important;" alt="Flag Image">                     </a>
+                     <div class="dropdown-menu ml-3" aria-labelledby="navbarDropdown2">
+                        <a class="dropdown-item" href="{{ path('account_locale', {_locale: 'fr'}) }}">FR</a>
+                        <a class="dropdown-item" href="{{ path('account_locale', {_locale: 'en'}) }}">EN</a>
+                     </div>
+                  </li>
+               </ul>
+               {% if not app.user%}
+               <ul class="navbar-nav">
+                  <a href="{{ path('login') }}" ><button class="btn btn-secondary my-2 my-sm-0">{% trans %}Log in{% endtrans %}</button></a>
+               </ul>
+               {% endif %}
+         </div>
+      </nav>
+
+      {% if breadcrum is defined %}
+         {% for link in breadcrum|split(' > ')[0: breadcrum|split(' > ')|length -1] %}
+               <h6 class="ml-2" style="display :inline-block;"><a href="{{ path(link|lower) }}">{{ link|capitalize|trans }}</a> ></h6>
+         {% endfor %}
+         <h6 class="ml-2" style="display :inline-block;">{{breadcrum|split(' > ')[breadcrum|split(' > ')|length -1]|capitalize|trans}}</h6>
+      {% endif %}
+
+
+      <section class="jumbotron text-center">
+         <div class="container">
+            {% for message in app.flashes('success') %}
+               <div class="alert alert-success">
+               {% if "you will travel to" not in message %}
+                  {% trans %}Success{% endtrans %} ! {{ message|capitalize|trans }}.
+               {% else %}
+                  {% set m = message|split("travel to ")[0] %}
+                  {% trans %}Success{% endtrans %} ! {{ (m ~ "travel to")|capitalize|trans }} {{booking.trip.toC.name}}!
+               {% endif %}
+               </div>
+            {% endfor %}
+            {% for message in app.flashes('warning') %}
+               <div class="alert alert-warning">
+                  {% trans %}Warning{% endtrans %} ! {{ message|capitalize|trans }}.
+               </div>
+            {% endfor %}
+            {% for message in app.flashes('error') %}
+               <div class="alert alert-error">
+                  {% trans %}Error{% endtrans %} ! {{ message|capitalize|trans }}.
+               </div>
+            {% endfor %}
+            {% block body %}{% endblock %}
+         </div>
+      </section>
+
+      <footer class="text-muted">
+         <div class="container">
+            <p class="float-right">
+               <a href="#">{% trans %}Back to top{% endtrans %}</a>
+            </p>
+            <p>{% trans %}All right reserved to the best team composed by {% endtrans %}Elyne, Gaëtan & Samuel 😎</p>
+            <p>{% trans %}Just found a bug ? Report it to{% endtrans %} <a href="https://random_url.com">{% trans %}us{% endtrans %}</a> !</p>
+         </div>
+      </footer>
+
+      <script src="{{ asset('js/jquerry.js') }}"></script>
+      <script src="{{ asset('js/popper.min.js') }}"></script>
+      <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+      {% block javascripts %}{% endblock %}
+   </body>
+</html>

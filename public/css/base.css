@@ -1,0 +1,26 @@
+body {
+    overflow-x: hidden;
+}
+
+a:hover {
+    text-decoration: none !important;
+}
+
+.user {
+    width: 64px !important;
+    height: 64px !important;
+}
+
+.navbar-nav:hover {
+    border-bottom: 3px ridge #ccc;
+    transform: scale(1.11);
+    z-index: 5000;
+}
+
+.trip-card:hover {
+    transform: scale(1.05);
+}
+
+.card-booking:hover {
+    transform: scale(1.05);
+}

@@ -1,0 +1,102 @@
+/* AUTOCOMPLETE CSS ↓↓↓↓↓↓↓↓↓↓         */
+
+
+/*the container must be positioned relative*/
+
+.autocomplete {
+    position: relative;
+    display: inline-block;
+    box-sizing: border-box;
+}
+
+.autocomplete-items {
+    border: 1px solid #000;
+    top: 100%;
+    left: 0;
+    right: 0;
+    cursor: pointer;
+}
+
+
+/*when hovering an item:*/
+
+.autocomplete-items:hover {
+    background-color: #565656;
+}
+
+
+/*when navigating through the items using the arrow keys:*/
+
+.autocomplete-active {
+    background-color: DodgerBlue !important;
+    color: #0505ff;
+}
+
+
+/*Placeholder in italic*/
+
+::-webkit-input-placeholder {
+    font-style: italic;
+}
+
+ :-moz-placeholder {
+    font-style: italic;
+}
+
+ ::-moz-placeholder {
+    font-style: italic;
+}
+
+ :-ms-input-placeholder {
+    font-style: italic;
+}
+
+#at::placeholder {
+    font-style: normal;
+}
+
+#submit {
+    visibility: hidden;
+}
+
+#animated-car {
+    width: 100px;
+    height: 100px;
+    position: relative;
+    animation-name: come;
+    animation-duration: 4s;
+    animation-timing-function: cubic-bezier(.09, .78, .97, .25);
+    animation-fill-mode: forwards;
+}
+
+#human {
+    width: 75px;
+    height: 50px;
+    position: relative;
+    right: 15px;
+    animation-delay: 3s;
+    animation-name: disapear;
+    animation-duration: 0.15s;
+    animation-timing-function: ease;
+    animation-fill-mode: forwards;
+}
+
+@keyframes come {
+    0% {
+        left: -1000px;
+        top: 0px;
+    }
+    100% {
+        left: 850px;
+        top: 0px;
+    }
+}
+
+@keyframes disapear {
+    0% {
+        opacity: 100%;
+    }
+    100% {
+        opacity: 0%;
+    }
+}

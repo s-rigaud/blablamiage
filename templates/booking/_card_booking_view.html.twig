@@ -1,0 +1,22 @@
+{% if booking %}
+        {% if booking.trip.end > date() %}
+            <div class="card border-success m-3 card-booking">
+                <div class="card-header border-success">{% trans %}Active{% endtrans %}</div>
+                <div class="card-body text-success">
+        {% else %}
+            <div class="card border-dark m-5 card-booking">
+                <div class="card-header border-dark">{% trans %}Archived{% endtrans %}</div>
+                <div class="card-body text-dark">
+        {% endif %}
+                    <img src="{{ asset('images/user.webp') }}" class="user align-self-start mr-3" alt="User Image">
+                    <h5 class="card-title">{% trans %}Travel with{% endtrans %} {{booking.trip.driver.surname}}</h5>
+                    <form action="{{ path('trip_view', {id: booking.trip.id}) }}">
+                        <button class="btn btn-secondary">{% trans %}Review trip{% endtrans %}</button>
+                    </form>
+                    <h6>{% trans %}The{% endtrans %} {{booking.trip.start.format('d/m/Y')}}</h6>
+                    <h6>{% trans %}From{% endtrans %} {{booking.trip.fromC.name|capitalize}} {% trans %}at{% endtrans %} {{booking.trip.start.format('Y:m:d H:m:i')}}</h6>
+                    <h6>{% trans %}To{% endtrans %} {{booking.trip.toC.name|capitalize}} {% trans %}at{% endtrans %} {{booking.trip.end.format('H:m:i')}}</h6>
+                    <h6>{% trans %}For{% endtrans %} {{booking.trip.seatPrice}}€</h6>
+                </div>
+            </div>
+{% endif %}

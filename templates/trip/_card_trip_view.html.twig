@@ -1,0 +1,26 @@
+
+{% if trip %}
+        {% if trip.end > date() %}
+            <div class="card border-success m-3 trip-card">
+                <div class="card-header border-success">{% trans %}Active{% endtrans %}</div>
+                <div class="card-body text-success">
+        {% else %}
+            <div class="card border-dark m-5 trip-card">
+                <div class="card-header border-dark">{% trans %}Archived{% endtrans %}</div>
+                <div class="card-body text-dark">
+        {% endif %}
+                    <img src="{{ asset('images/user.webp') }}" class="user align-self-start mr-3" alt="User Image">
+                    {% if app.user and trip.driver.id == app.user.id %}
+                        <h5 class="text-primary">{% trans %}My trip{% endtrans %} 🚗</h5>
+                    {% else %}
+                        <h5 class="card-title">{% trans %}Travel with{% endtrans %} {{trip.driver.surname}}</h5>
+                    {% endif %}
+
+                    <h6>{% trans %}The{% endtrans %} {{trip.start.format('d/m/Y')}}</h6>
+                    <h6>{{trip.fromC.name|capitalize}} {% trans %}at{% endtrans %} {{trip.start.format('H:m:i')}}</h6>
+                    <h6>{{trip.toC.name|capitalize}} {% trans %}at{% endtrans %} {{trip.end.format('H:m:i')}}</h6>
+                    <h6>{% trans %}For{% endtrans %} {{trip.seatPrice}}€</h6>
+                </div>
+
+            </div>
+{% endif %}

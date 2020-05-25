@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}🗺️| Editing trip - BlablaMiage{% endblock %}
+
+{% block body %}
+    {{form_start(form)}}
+        <div class="row">
+            <div class="col-md-4">{{ form_row(form.login) }}</div>
+            <div class="col-md-5">{{ form_row(form.surname) }}</div>
+            <div class="col-md-2">{{ form_row(form.locale) }}</div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">{{ form_row(form.password) }}</div>
+            <div class="col-md-5">{{ form_row(form.mail) }}</div>
+            <div class="col-md-2">{{ form_row(form.theme) }}</div>
+        </div>
+    {{form_rest(form)}}
+    <button class="btn btn-secondary" style="margin-bottom: 160px;">{{ button|default('Create my account')|trans }}</button>
+    {{form_end(form)}}
+
+{% endblock %}

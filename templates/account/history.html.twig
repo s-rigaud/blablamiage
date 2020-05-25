@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}🗺️| {% trans %}Trip & Booking history{% endtrans %} - BlablaMiage{% endblock %}
+
+{% block body %}
+    {% set something = 0 %}
+
+    {% if trips is defined and trips|length > 0 %}
+        {% set something = 1 %}
+        <h1 id="trips">{% trans %}My last trips{% endtrans %}</h1>
+        <div class="count">
+            {% trans %}You have created{% endtrans %} {{ trips.getTotalItemCount }} {% trans %}trip{% endtrans %}{% if trips.getTotalItemCount > 1 %}s{% endif %}
+        </div>
+        {% for trip in trips %}
+        <a href="{{ path('trip_view', {id: trip.id}) }}">
+            {{ include('trip/_card_trip_view.html.twig', {'trip': trip}) }}
+        </a>
+        {% endfor %}
+
+        <form action="{{ path('account_history') }}">
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="archived" id="r2" value="0" {% if archived != "1" %}checked{% endif %} onclick="this.form.submit()">
+                <label class="form-check-label" for="r2">
+                    {% trans %}Only active trips{% endtrans %}
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="archived" id="r1" value="1" {% if archived == "1" %}checked{% endif %} onclick="this.form.submit()">
+                <label class="form-check-label" for="r1">
+                    {% trans %}Only archived trips{% endtrans %}
+                </label>
+            </div>
+        </form>
+        <div class="pagination" style="display: flex;justify-content: center;">
+            {{ knp_pagination_render(trips) }}
+        </div>
+    {% endif %}
+
+    {% if bookings is defined and bookings|length > 0 %}
+        {% set something = 1 %}
+        <h1 id="bookings">{% trans %}My last bookings{% endtrans %}</h1>
+        <div class="count">
+            {% trans %}You have booked{% endtrans %} {{ bookings.getTotalItemCount }} {% trans %}time{% endtrans %}{% if trips.getTotalItemCount > 1 %}s{% endif %}
+        </div>
+        {% for booking in bookings %}
+        <a href="{{ path('booking_view', {id: booking.id}) }}">
+            {{ include('booking/_card_booking_view.html.twig', {'booking': booking}) }}
+        </a>
+        {% endfor %}
+        <div class="pagination" style="display: flex;justify-content: center;">
+            {{ knp_pagination_render(bookings) }}
+        </div>
+    {% endif %}
+
+    {% if something == 0 %}
+        <h1>{% trans %}You have not made any trip yet{% endtrans %}</h1>
+        <a href="{{ path('search') }}"><button type="button" class="btn btn-secondary">{% trans %}Start now{% endtrans %} ! 🔎🗺️</button></a>
+    {% endif %}
+
+{% endblock %}

@@ -1,0 +1,21 @@
+
+
+
+
+###< symfony/framework-bundle ###
+###< symfony/phpunit-bridge ###
+###< symfony/web-server-bundle ###
+###> symfony/framework-bundle ###
+###> symfony/phpunit-bridge ###
+###> symfony/web-server-bundle ###
+.phpunit
+.phpunit.result.cache
+/.env.*.local
+/.env.local
+/.env.local.php
+/.web-server-pid
+/config/secrets/prod/prod.decrypt.private.php
+/phpunit.xml
+/public/bundles/
+/var/
+/vendor/

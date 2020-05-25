@@ -1,0 +1,16 @@
+    {{form_start(form)}}
+    <div class="row">
+        <div class="col-md-6">{{ form_row(form.start) }}</div>
+        <div class="col-md-6">{{ form_row(form.end) }}</div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">{{ form_row(form.fromC) }}</div>
+        <div class="col-md-6">{{ form_row(form.toC) }}</div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">{{ form_row(form.maxSeats) }}</div>
+        <div class="col-md-6">{{ form_row(form.seatPrice) }}</div>
+    </div>
+    {{form_rest(form)}}
+    <button class="btn btn-secondary">{{ button|default('Send')|trans }}</button>
+    {{form_end(form)}}

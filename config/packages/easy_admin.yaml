@@ -1,0 +1,69 @@
+easy_admin:
+    site_name: 'BlablaMiage'
+    translation_domain: 'EasyAdminBundle'
+    design:
+        menu:
+            - { route: 'home', label: 'Back to the website', icon: 'home'}
+            - City
+            - User
+            - Trip
+            - Booking
+            - Comment
+
+    entities:
+        City:
+            class: App\Entity\City
+            label: 'Cities'
+            form:
+                fields:
+                    - {property: 'name'}
+                    - {property: 'longitude'}
+                    - {property: 'latitude'}
+
+        User:
+            class: App\Entity\User
+            label: 'Users'
+            form:
+                fields:
+                    - {property: 'login'}
+                    - {property: 'password'}
+                    - {property: 'surname'}
+                    - {property: 'mail'}
+
+        Trip:
+            class: App\Entity\Trip
+            label: 'Trips'
+            form:
+                fields:
+                    - {property: 'driver'}
+                    - {property: 'fromC', label: 'Start in'}
+                    - {property: 'toC', label: 'End in'}
+                    - {property: 'start', label: 'Start at'}
+                    - {property: 'end', label: 'End at'}
+                    - {property: 'seatPrice'}
+                    - {property: 'maxSeats'}
+            list:
+                fields: ['driver', {property: 'fromC', label: 'Start in'}, {property: 'toC', label: 'End in'}, {property: 'start', label: 'Start at'}, {property: 'end', label: 'End at'}, {property: 'seatPrice'}, {property: 'maxSeats'}]
+                sort: 'created'
+
+        Comment:
+            class: App\Entity\Comment
+            label: 'Comments'
+            form:
+                sort: 'created'
+                fields:
+                    - {property: 'user'}
+                    - {property: 'trip'}
+                    - {property: 'text'}
+
+        Booking:
+            class: App\Entity\Booking
+            label: 'Bookings'
+            form:
+                sort: 'created'
+                fields:
+                    - {property: 'user'}
+                    - {property: 'trip'}
+                    - {property: 'seats', label: 'Number of seats booked'}
+            list:
+                fields: ['user', 'trip', {property: 'seats', label: 'Number of seats booked'}]

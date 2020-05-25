@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+{% block title %}🗺️| {% trans %}Home{% endtrans %} - BlablaMiage{% endblock %}
+{% block stylesheets %}
+   <link rel="stylesheet" type="text/css" href="{{asset('css/bootstrap-datetimepicker.css')}}">
+{% endblock %}
+{% block body %}
+   <h1>{% trans %}Find the best trips and save money{% endtrans %}</h1>
+   <h1 class="lead text-muted">{% trans %}You can enter your departure and your destination now{% endtrans %} !</h1>
+
+   <img id="animated-car" src="{{ asset('images/car.png') }}" alt="User Image">
+   <img id="human" src="{{ asset('images/human.png') }}" alt="User Image">
+
+   <p>
+   <form id="city_form" method="GET" action="/trip/find"style="margin-bottom: 100px;">
+      <div class="row" style="margin-bottom: 15px;">
+         <div class="col col-md-6">
+            <input type="text" class="form-control" id="from_search_bar" name="from" placeholder="{% trans %}Departure{% endtrans %}" autocomplete="off" oninput="display_submit()"
+            {% if from_name is defined%} value={{from_name}}{% endif %}>
+         </div>
+         <div class="col col-md-6">
+            <input type="text" class="form-control" id="to_search_bar" name="to" placeholder="{% trans %}Destination{% endtrans %}" autocomplete="off" oninput="display_submit()"
+            {% if to_name is defined%} value={{to_name}}{% endif %}>
+         </div>
+      </div>
+      <div class="row">
+         <div class='input-group date col col-md-6' id='datetimepicker1'>
+            <input type='text' class="form-control" id="at" name="at" placeholder="📅" autocomplete="off" onchange="display_submit()"/>
+            <span class="input-group-addon">
+            <span class="glyphicon glyphicon-calendar"></span>
+            </span>
+         </div>
+         <button id="submit" class="btn btn-info col col-md-3" type="submit">{% trans %}Submit{% endtrans %}</button>
+      </div>
+   </form>
+
+   </p>
+   {% endblock %}
+   {% block javascripts %}
+   <script src="{{ asset('js/bootstrap-datetimepicker.js') }}"></script>
+   <script src="{{ asset('js/search.js') }}"></script>
+   <script>
+
+      //If user clicks anywhere the list is being closed for both list
+      document.addEventListener("click", function(e) {
+         for (let htmlElement of document.getElementsByClassName("autocomplete-list")) {
+            let htmlInput = htmlElement.previousElementSibling
+            deleteSuggestions(null, htmlInput, htmlElement)
+         }
+      })
+
+      autocomplete_setup(from_search_bar, [], 0)
+      autocomplete_setup(to_search_bar, [], 1)
+      $('#at').value = ''
+      $(function () {
+         $('#datetimepicker1').datetimepicker({
+            language: '{{ app.request.locale }}',
+            autoclose: true,
+            startDate: '{{"now"|date("Y-m-d")}}',
+            pickerPosition: "bottom-left",
+            todayHighlight: true,
+            minuteStep: 10,
+            viewSelect: 'month'
+         })
+      })
+
+      function everything_required(){
+         return $('#at').val() !== "" && $('#to_search_bar').val() !== "" && $('#from_search_bar').val() !== ""
+      }
+
+      function display_submit(){
+         if(everything_required()){
+               $('#submit').css('visibility', 'visible')
+         }
+      }
+   </script>
+{% endblock %}

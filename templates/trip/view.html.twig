@@ -1,0 +1,117 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}🗺️| {% trans %}Trip view{% endtrans %} - BlablaMiage{% endblock %}
+
+{% block body %}
+    <!--Pre-content requirements-->
+    <script src="{{ asset('js/comment.js') }}"></script>
+
+    {% if trip is defined %}
+        <!--trip part-->
+        <div class="card">
+            <div class="card-body">
+                {% if app.user and app.user != trip.driver%}
+                    <img src="{{ asset('images/user.webp') }}" class="user align-self-start mr-3" alt="{% trans %}User Image{% endtrans %}">
+                    <h5 class="card-title">{% trans %}Travel with{% endtrans %} {{trip.driver.surname}}</h5>
+                {% endif %}
+                <h6>{% trans %}The{% endtrans %} {{trip.start.format('d/m/Y')}}</h6>
+                <h6>{% trans %}From{% endtrans %} {{trip.fromC.name|capitalize}} {% trans %}at{% endtrans %} {{trip.start.format('H:m:i')}}</h6>
+                <h6>{% trans %}To{% endtrans %} {{trip.toC.name|capitalize}} {% trans %}at{% endtrans %} {{trip.end.format('H:m:i')}}</h6>
+                <h6>{% trans %}For{% endtrans %} {{trip.seatPrice}}€</h6>
+                {% if seats > 0 %}<h6>{% trans %}Only{% endtrans %} {{ seats }} {% trans %}seat{% endtrans %}{% if seats > 1 %}s{% endif %} {% trans %}available{% endtrans %}</h6>{% endif %}
+                {% if trip.maxSeats > seats %}<h6>{% trans %}Already{% endtrans %} {{ trip.maxSeats - seats }} {% trans %}seat{% endtrans %}{% if trip.maxSeats - seats > 1 %}s{% endif %} {% trans %}taken{% endtrans %}</h6>{% endif %}
+            </div>
+
+            {% if app.user %}
+                <!--Driver Management Part-->
+                {% if trip.driver.id == app.user.id %}
+                    {% if trip.bookings|length == 0 %}
+                        <form action="{{ path('trip_view', {id: trip.id}) }}" method="POST">
+                            <button type="submit" class="btn btn-warning">{% trans %}Edit trip{% endtrans %}</button>
+                        </form>
+                    {% endif %}
+                    <form action="{{ path('trip_view', {id: trip.id}) }}" method="POST" onsubmit="return confirm('{% trans %}Do you really want to delete this trip{% endtrans %} ?')">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ trip.id)}}">
+                        <button class="btn btn-danger">{% trans %}Delete trip{% endtrans %}</button>
+                    </form>
+                    {% for booking in trip.bookings %}
+                        <h6>{% trans %}Reservation for{% endtrans %} {{booking.user.surname}} {% trans %}for{% endtrans %} {{booking.seats}} {% trans %}person{% endtrans %}{% if booking.seats > 1%}s{% endif %}</h6>
+                        <h6>{% trans %}Reservation made at{% endtrans %} {{booking.created.format('H:m:i')}} {% trans %}the{% endtrans %} {{booking.created.format('d-m-Y')}}</h6>
+                    {% endfor %}
+
+                {% else %}
+                    <!--Customer Part-->
+
+                    {% if already_booked_seats > 0 %}
+                        <p class="text-primary">{% trans %}You already have reserved{% endtrans %} {{already_booked_seats}} {% trans %}seat{% endtrans %}{% if already_booked_seats > 1 %}s{% endif %} {% trans %}for this trip.{% endtrans %} {% if seats > 0 %}{% trans %}You can select more seats here ↓{% endtrans %}{% endif %}</p>
+                    {% endif %}
+                    {% if seats > 0 %}
+                        <form action="{{ path('booking_create') }}" method="POST">
+                            <div class="row" style="margin-left: 300px;margin-bottom: 10px;">
+                                <input type="hidden" name="trip_id" value="{{trip.id}}">
+                                <h6 for="exampleFormControlSelect1">{% trans %}Number of seats{% endtrans %}</h6>
+                                <select class="form-control col-md-4" id="exampleFormControlSelect1" name="seats" style="margin-left: 20px">
+                                    {% for i in range(0, seats -1) %}
+                                        <option>{{ i +1 }}</option>
+                                    {% endfor %}
+                                </select>
+                                <button type="submit" class="btn btn-success" style="margin-left: 20px">{% trans %}Book now{% endtrans %}</button>
+                            </div>
+                        </form>
+                    {% endif %}
+                {% endif %}
+            {% else %}
+                <a href="{{ path('login') }}"><button class="btn btn-primary">{% trans %}Login to start booking{% endtrans %}</button></a>
+            {% endif %}
+        </div>
+
+        <!--Comment part-->
+        {% for comment in trip.comments %}
+            <div class="card">
+                <div class="card-header">
+                    {% if app.user and app.user == comment.user %}
+                        <h5 class="card-title">{% trans %}My comment{% endtrans %}</h5>
+                    {% else %}
+                        <img src="{{ asset('images/user.webp') }}" class="user align-self-start mr-3" alt="{% trans %}User Image{% endtrans %}">
+                        <h5 class="card-title">{% trans %}Comment from{% endtrans %} {{comment.user.surname}}</h5>
+                    {% endif %}
+                    <p>{% trans %}at{% endtrans %} {{comment.created.format('H:m:i')}} {% trans %}the{% endtrans %} {{comment.created.format('d/m/Y')}}</p>
+                    <h6>{{comment.text}}</h6>
+
+                {% if app.user and comment.user == app.user %}
+                    <button class="btn btn-secondary" onclick="makeVisible('form-comment-{{comment.id}}');makeVisible('card-body-{{comment.id}}')">{% trans %}Edit comment{% endtrans %}</button>
+
+                    <form action="{{ path('comment_delete', {id: comment.id}) }}" method="POST" onsubmit="return confirm('{% trans %}Do you really want to delete this comment{% endtrans %}: \'\'{{comment.text}}\'\' ?')">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ comment.id)}}">
+                        <button class="btn btn-danger">{% trans %}Delete comment{% endtrans %}</button>
+                    </form>
+
+                </div>
+                <div id="card-body-{{comment.id}}" class="card-body d-none">
+                    <form id='form-comment-{{comment.id}}' action="{{ path('comment_edit', {id: comment.id}) }}" method="POST" class="d-none">
+                        <input type="text" name="comment[text]" value='{{comment.text}}'>
+                        <button type="submit" class="btn btn-warning">{% trans %}Validate changes{% endtrans %}</button>
+                    </form>
+                {% else %}
+                </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <div class="card">
+            <div class="card-body">
+                <form action="{{ path('comment_create') }}" method="POST" onsubmit="return $('#comment-create').val() != '';">
+                    <input type="hidden" name="trip" value="{{trip.id}}">
+                    <input id="comment-create" type="text" name="comment[text]">
+                    <button type="submit" class="btn btn-primary">{% trans %}Create comment{% endtrans %}</button>
+                <form>
+            </div>
+        </div>
+
+    {% else %}
+        <h1>{% trans %}No trip where found with id{% endtrans %} {{trip.id}} {% trans %}from{% endtrans %} {{from_city.name}} {% trans %}to{% endtrans %} {{to_city.name}} {% trans %}on{% endtrans %} {{datetime.format('H:i:s d/m/Y')}}</h1>
+        <a href="{{ path('home') }}"><button type="button" class="btn btn-secondary">{% trans %}Back to search{% endtrans %} 🔎🗺️</button></a>
+    {% endif %}
+{% endblock %}
