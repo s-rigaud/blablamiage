@@ -4,13 +4,13 @@ PHP Symfony project
 
 The project was built using PHP 7.2.30 and Symfony 4.2.
 
-To get the best out of the project I sujest you to search for a trip from Nantes to Rennes the 12/06/2020.
+To get the best out of the project I suggest you to search for a trip from Nantes to Rennes the 12/06/2020.
 
 ## To launch the project
 
 ### Update your project dependencies
 
-step into this directory using a command prompt
+Step into this directory using a command prompt
 
 run `composer install`
 
